@@ -3,6 +3,8 @@
 **/yarn.lock
 **/.eslintcache
 **/node_modules
+**/debug.log
+
 
 backend/.Python
 backend/LICENSE.txt
