@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import UserPage from "../pages/UserPage";
 import LoginPage from "../pages/LoginPage";
@@ -24,7 +24,6 @@ export const routes = [
     component: _404Page,
   },
 ];
-
 export default function Routes(props) {
   return (
     <Router>
@@ -33,6 +32,14 @@ export default function Routes(props) {
       <Link to="/login">登录</Link>
 
       <Switch>
+        {routes.map(item =>
+          item.auth ? (
+            <item.auth key={item.path + "route"} {...item} />
+          ) : (
+            <Route key={item.path + "route"} exact={item.exact} path={item.path} component={item.component} />
+          )
+        )}
+
         {/* <Route exact path="/" component={HomePage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/user" component={UserPage} />
