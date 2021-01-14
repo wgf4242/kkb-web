@@ -4,7 +4,7 @@
 **/.eslintcache
 **/node_modules
 **/debug.log
-
+**/.umi/
 
 backend/.Python
 backend/LICENSE.txt

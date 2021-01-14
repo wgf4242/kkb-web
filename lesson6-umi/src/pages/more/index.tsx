@@ -35,20 +35,20 @@ class More extends React.Component {
   }
 
   // 成功才会执行这个函数
-  onFinish = values => {
+  onFinish = (values) => {
     console.log('values', values); // sy-log
     // this.props.getMoreDataBySearch(values);
     this.props.getProductData(values);
   };
 
   // 失败才会执行这个函数
-  onFinishFailed = err => {
+  onFinishFailed = (err) => {
     console.log('err', err); // sy-log
   };
 
   render() {
     const { data } = this.props.more;
-    
+
     return (
       <PageHeaderWrapper className={styles.more}>
         <Card>
@@ -70,7 +70,16 @@ class More extends React.Component {
 
         <Card>
           {/* <Table columns={columns} dataSource={data} rowKey="id" /> */}
-          <ProTable<{}> size="small" columns={columns} request={() => ({ data, success: true, })} rowKey="id" />
+          <ProTable<{}>
+            size="small"
+            columns={columns}
+            request={async() => {
+              const { getProductData } = require('../../services/product')
+              const res = await getProductData();
+              return { data: res.data && res.data.data, success: true };
+            }}
+            rowKey="id"
+          />
         </Card>
       </PageHeaderWrapper>
     );
@@ -82,7 +91,7 @@ export default connect(
   ({ more }) => ({ more }),
   // mapDispatchToProps
   {
-    getProductData: values => ({
+    getProductData: (values) => ({
       type: 'more/getProductData',
       payload: values,
     }),
