@@ -12,10 +12,10 @@ function Prompt({message, when = true}) {
         return (
           <LifeCycle
             onMount={self => {
-              method(message)
+              self.release = method(message);
             }}
             onUnmount={self => {
-              method(null)
+              self.release();
             }}
           />
         )
