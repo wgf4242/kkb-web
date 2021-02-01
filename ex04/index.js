@@ -1,34 +1,72 @@
-const Sequelize = require('sequelize');
-module.exports.initModel = async sequelize => {
-  // ##BEGIN## 代码已加密
-gywgywg9Lgdegd9gdmgywgcRgywgdegd9gdHgd=gd9gdPgdngR9gd9gqDgdcgd9gddgdngdvgd9gqRgqdgd=gdegd9gdmgqdgqlgywgRd
-gywgywgywgywgdngdcgccgywgRd
-gywgywgywgywgywgywgdwgRcgdYgd9gccgywg9kgd9gdHgd=gd9gdPgdngR9gd9gqDgceg9qg9ngcUgcHgcUg9Rgql
-gywgywgywgywgywgywgdggd=gdwgdUgcegdvgdqgdmgd9gdDgd9gdvgdwgccgywgdwgdmgd=gd9gql
-gywgywgywgywgywgywgdggdPgdPgdUgRyg9qgd=gdPgdPgccgywgddgdggdPgdegd9gql
-gywgywgywgywgywgywgdYgdmgdngdDgdggdmgRcgc=gd9gRcgccgywgdwgdmgd=gd9
-gywgywgywgywgRkgql
-gywgywgywgywgdvgdggdDgd9gccgywg9kgd9gdHgd=gd9gdPgdngR9gd9gqDg9kg9ng9Rgceg9qgcH
-gywgywgRkgqkgc9
+// const Sequelize = require("sequelize");
+// module.exports.initModel = async sequelize => {
+//   var Product = sequelize.define("Product", { title: Sequelize.STRING(100) }, { timestamps: false });
+//   var User = sequelize.define("User", { name: Sequelize.STRING(100) }, { timestamps: false });
 
-gywgywg99gdmgdUgdcgd=gdqgdwgywgcRgywgdegd9gdHgd=gd9gdPgdngR9gd9gqDgdcgd9gddgdngdvgd9gqRgqdgdYgdmgdUgdcgd=gdqgdwgqdgqlgywgRd
-gywgywgywgywgdngdcgccgywgRd
-gywgywgywgywgywgywgdwgRcgdYgd9gccgywg9kgd9gdHgd=gd9gdPgdngR9gd9gqDgceg9qg9ngcUgcHgcUg9Rgql
-gywgywgywgywgywgywgdggd=gdwgdUgcegdvgdqgdmgd9gdDgd9gdvgdwgccgywgdwgdmgd=gd9gql
-gywgywgywgywgywgywgdggdPgdPgdUgRyg9qgd=gdPgdPgccgywgddgdggdPgdegd9gql
-gywgywgywgywgywgywgdYgdmgdngdDgdggdmgRcgc=gd9gRcgccgywgdwgdmgd=gd9
-gywgywgywgywgRkgql
-gywgywgywgywgdwgdngdwgdPgd9gccgywgRd
-gywgywgywgywgywgywgdwgRcgdYgd9gccgywg9kgd9gdHgd=gd9gdPgdngR9gd9gqDg9kg9ng9Rgceg9qgcHgql
-gywgywgywgywgywgywgdggdPgdPgdUgRyg9qgd=gdPgdPgccgywgddgdggdPgdegd9
-gywgywgywgywgRkgql
-gywgywgRkgqkgc9
-gywgywg99gdmgdUgdcgd=gdqgdwgqDgdygd9gdPgdUgdvgdRgdeg9ngdUgqRg9Lgdegd9gdmgqlgywgRd
-gywgywgywgywgdqgdUgdvgdegdwgdmgdggdngdvgdwgdegccgywgdwgdmgd=gd9gql
-gywgywgywgywgdUgdvgcvgd9gdPgd9gdwgd9gccgywgqdgcDgclg9kgcDgclgcvgcUgqd
-gywgywgRkgqkgc9
-gywgywg9Lgdegd9gdmgqDgdkgdggdeg9ygdggdvgRcgqRg99gdmgdUgdcgd=gdqgdwgqkgc9
-gywgywgdggRygdggdngdwgywgdegd9gdHgd=gd9gdPgdngR9gd9gqDgdegRcgdvgdqgqRgdwgdmgd=gd9gqk
-  // ##END##
-  return { User, Product }
-} 
+//   User.hasMany(Product, { as: "products" });
+//   Product.belongsTo(User);
+
+//   await sequelize.sync();
+
+//   return { User, Product };
+// };
+
+
+const Sequelize = require("sequelize");
+module.exports.initModel = async sequelize => {
+  // ##BEGIN##
+  User = sequelize.define("user", {
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
+    },
+    name: Sequelize.STRING,
+  });
+
+  Product = sequelize.define("product", {
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
+    },
+    title: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+  });
+  Product.belongsTo(User, {
+    constraints: true,
+    onDelete: "CASCADE",
+  });
+  User.hasMany(Product);
+  await sequelize.sync(true); // ##END##
+  return { User, Product };
+}; 
+
+// const sequelize = new Sequelize("test", "root", "root", {
+//   host: "localhost",
+//   dialect: "mysql",
+// });
+// (async () => {
+//   const { initModel } = module.exports;
+//   const { Product, User } = await initModel(sequelize);
+
+//   // 设置数据
+//   user = await User.create({
+//     name: "Tom",
+//   });
+//   await user.createProduct({
+//     title: "商品一",
+//   });
+//   await user.createProduct({
+//     title: "商品二",
+//   });
+//   const ret = await Product.findAll({
+//     attributes: ["title"],
+//   });
+
+//   console.log(ret);
+// })();
