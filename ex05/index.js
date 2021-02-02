@@ -1,9 +1,8 @@
 // const {EventEmitter} = require('events')
-class EventEmitter {
+module.exports = class Connection {
   constructor() {
     this._events = {};
   }
-
   on(eventName, callback) {
     if (!this._events[eventName]) {
       this._events[eventName] = [];
@@ -16,27 +15,13 @@ class EventEmitter {
       cb(payload);
     });
   }
-}
 
-const ev = new EventEmitter();
-ev.on("start", payload => {
-  console.log("start runs", payload);
-});
+  onConn(fn) {
+    this.on("start", fn);
+  }
 
-ev.emit("start", "hi");
+  connection(payload) {
+    this.emit("start", payload);
+  }
+};
 
-module.exports = class Connection {
-    // ##BEGIN## 代码已加密
-gywgywgywgywgdqgdUgdvgdegdwgdmgd=gdqgdwgdUgdmgywgqRgqkgRd
-gywgywgywgywgywgywgywgywgdwgdkgdngdegqDgd9gRggd9gdvgdwgywgcRgywgdvgd9gRygywgcUgRggd9gdvgdwgcUgdDgdngdwgdwgd9gdmgqRgqkgc9gyw
-gywgywgywgywgRk
-
-gywgywgywgywgdqgdUgdvgdvgd9gdqgdwgdngdUgdvgqRgdDgdegdRgqkgywgRd
-gywgywgywgywgywgywgywgywgdwgdkgdngdegqDgd9gRggd9gdvgdwgqDgd9gdDgdngdwgqRgqdgdqgdUgdvgdvgqdgqlgdDgdegdRgqk
-gywgywgywgywgRk
-
-gywgywgywgywgdUgdvgcDgdUgdvgdvgqRgdqgdygqkgywgRd
-gywgywgywgywgywgywgywgywgdwgdkgdngdegqDgd9gRggd9gdvgdwgqDgdUgdvgqRgqdgdqgdUgdvgdvgqdgqlgdqgdygqk
-gywgywgywgywgRk
-    // ##END##
-}
