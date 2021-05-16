@@ -27,30 +27,35 @@ npm init egg --type=simple
 
 npm run lint -- --fix 会自动修复 分号等一。
 
+
+
+## 第2节  07-代码规范+husky设置
+
 [husky](https://github.com/typicode/husky)
 , 专门做githook
 
-npm i husky --save-dev
+`npm i husky --save-dev`
 
-第2节  07-代码规范+husky设置
-课程问答
+[commit](https://github.com/commitizen/cz-cli) 校验工具
 
-点播： 07-代码规范+husky设置
-看点播
+```
+npm install -g commitizen
+commitizen init cz-conventional-changelog --save-dev --save-exact
 
-第3节  08-sessin和jwt架构介绍
-课程问答
+
+git add .
+git cz
+```
+## 第3节  08-sessin和jwt架构介绍
 
 点播： 08-sessin和jwt架构介绍
 看点播
 
-第4节  09-登录验证码功能
-课程问答
+## 第4节  09-登录验证码功能
 
 点播： 09-登录验证码功能
 看点播
 
-第5节  10-图片验证码实现
-课程问答
+## 第5节  10-图片验证码实现
 
 点播： 10-图片验证码实现
