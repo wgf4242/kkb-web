@@ -1,17 +1,24 @@
 <template>
   <div>
-    <el-form class="login-form">
+    <el-form class="login-form" :rules="rules">
       <el-form-item props="email">
         <span><i class="el-icon-mobile"></i></span>
-        <el-input placeholder="用户名"></el-input>
+        <el-input placeholder="邮箱"></el-input>
+      </el-form-item><el-form-item props="email">
+        <span><i class="el-icon-lock"></i></span>
+        <el-input placeholder="密码"></el-input>
       </el-form-item>
+
     </el-form>
   </div>
 </template>
 
 <script>
 export default {
-  layout: "login"
+  layout: "login",
+  data() {
+    return {rules}
+  }
 };
 </script>
 

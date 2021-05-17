@@ -95,6 +95,15 @@ nuxt.configj.js
   ],
 ```
 
-npm install stylus-loader stylus --save
+stylus-loader版本不要太高
+
+```
+npm install stylus --save
+npm install stylus-loader@3.0.2  --save-dev
+```
+
+https://github.com/produck/svg-captcha
+
+npm install --save svg-captcha
 
 ## 第5节  10-图片验证码实现
