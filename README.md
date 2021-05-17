@@ -106,4 +106,25 @@ https://github.com/produck/svg-captcha
 
 npm install --save svg-captcha
 
+
+### proxy代理设置
+
+nuxt.config.js
+
+```js
+  modules: [
+    // https://go.nuxtjs.dev/axios
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
+  ],
+  proxy: {
+    "/api/": {
+      target: 'http://localhost:7001',
+      secure: false,
+      pathRewrite: {
+          '^/api': ""
+      }
+    }
+```
+
 ## 第5节  10-图片验证码实现
