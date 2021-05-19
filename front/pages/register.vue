@@ -11,27 +11,27 @@
         <img src="/logo.png" alt="" />
       </div>
 
-      <el-form-item props="email" label="邮箱">
+      <el-form-item prop="email" label="邮箱">
         <el-input v-model="form.email" placeholder="请输入邮箱"></el-input>
       </el-form-item>
 
-      <el-form-item props="captcha" label="验证码" class="captcha-container">
+      <el-form-item prop="captcha" label="验证码" class="captcha-container">
         <div class="captcha">
           <img :src="code.captcha" alt="" @click="resetCaptcha" />
         </div>
         <el-input v-model="form.captcha" placeholder="请输入验证码"></el-input>
       </el-form-item>
 
-      <el-form-item props="nickname" label="昵称">
+      <el-form-item prop="nickname" label="昵称">
         <el-input v-model="form.nickname" placeholder="请输入昵称"></el-input>
       </el-form-item>
 
-      <el-form-item props="passwd" label="密码">
-        <el-input v-model="form.passwd" placeholder="请输入密码"></el-input>
+      <el-form-item prop="passwd" label="密码">
+        <el-input type="password" v-model="form.passwd" placeholder="请输入密码"></el-input>
       </el-form-item>
 
-      <el-form-item props="repasswd" label="再次输入密码">
-        <el-input
+      <el-form-item prop="repasswd" label="确认密码">
+        <el-input type="password"
           v-model="form.repasswd"
           placeholder="请输入再次输入密码"
         ></el-input>
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import md5 from 'md5';
 export default {
   methods: {
     resetCaptcha() {
@@ -83,10 +84,10 @@ export default {
   data() {
     return {
       form: {
-        email: "",
-        nickname: "",
-        passwd: "",
-        repasswd: "",
+        email: "eworj@qq.com",
+        nickname: "TeamWang",
+        passwd: "a12312314",
+        repasswd: "a12312314",
         captcha: ""
       },
       rules: {

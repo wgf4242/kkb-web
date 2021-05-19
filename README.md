@@ -128,3 +128,32 @@ nuxt.config.js
 ```
 
 ## 第5节  10-图片验证码实现
+
+
+
+
+# 第三章 项目03
+## 第1节  11-注册表单
+## 第2节  12-注册功能实现
+## 第3节  13-axios配置
+nuxt.config.js
+
+```js
+  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
+  plugins: [
+    '@/plugins/element-ui',
+    '@plugins/axios'
+  ],
+```
+新建mongodb
+
+第4节  14-eggjs规范指定
+
+
+第5节  15-注册实现-01
+
+
+第6节  16-数据入库+mongodb
+
+
+第7节  17-登录认证
