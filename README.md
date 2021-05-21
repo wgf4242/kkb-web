@@ -145,10 +145,25 @@ nuxt.config.js
     '@plugins/axios'
   ],
 ```
-新建mongodb
 
-第4节  14-eggjs规范指定
+## 第4节  14-eggjs规范指定
+新建mongodb, kkbhub
 
+`npm install egg-router-group egg-mongoose egg-validate md5 jsonwebtoken --save`
+
+规范
+```json
+{
+  code:0
+  data:{
+  },
+  message:{
+  }
+}
+```
+code 0 成功， 其他是失败
+-1 是错误 
+-666 登录状态过期
 
 第5节  15-注册实现-01
 
