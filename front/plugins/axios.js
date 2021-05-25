@@ -10,6 +10,10 @@ const service = axios.create({
 // 主要做token的管理
 
 // 响应拦截
+service.interceptors.response.use(async response => {
+  let { data } = response;
+  return data;
+});
 
 Vue.prototype.$http = service;
 export const http = service;

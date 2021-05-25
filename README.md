@@ -165,10 +165,61 @@ code 0 成功， 其他是失败
 -1 是错误 
 -666 登录状态过期
 
-第5节  15-注册实现-01
+## 第5节  15-注册实现-01
+
+app\model\user.js
+```js
+module.exports = app => {
+  const mongoose = app.mongoose;
+  const Schema = mongoose.Schema;
+
+  const UserSchema = new Schema(
+    {
+      // __v:
+      email: { type: String, require: true },
+      password: { type: String, require: true },
+      nickname: { type: String, require: true },
+      avatar: { type: String, require: false, default: "/user.png" },
+    },
+    { timestamp: true }
+  );
+  return mongoose.model("User", UserSchema);
+};
+```
 
 
 第6节  16-数据入库+mongodb
 
 
 第7节  17-登录认证
+
+# 第四章 
+## 第1节  18-发送邮件验证码
+1.用户名密码验证
+    1.简单的验证码
+    2.token的管理 => 用户中心页面，，发送请求，自动 带上token
+2.用户信息
+    1.信息的增删改查
+    2.头像的上传
+ 
+npm i nodemailer
+
+点播： 18-发送邮件验证码
+看点播
+
+第2节  19-登录验证码认证
+课程问答
+
+点播： 19-登录验证码认证
+看点播
+
+第3节  20-axios管理token认证
+课程问答
+
+点播： 20-axios管理token认证
+看点播
+
+第4节  21-图片上传0.1版本实现
+课程问答
+
+点播： 21-图片上传0.1版本实现
