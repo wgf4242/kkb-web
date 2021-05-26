@@ -1,13 +1,13 @@
 const { Service } = require("egg");
 const nodemailer = require("nodemailer");
 
-const userEmail = "xxx@126.com";
-const transporter = nodemailer.createTransportj({
+const userEmail = "xx131@126.com";
+const transporter = nodemailer.createTransport({
   service: "126",
   secureConnection: true,
   auth: {
     user: userEmail,
-    pass: "xxxxx",
+    pass: "13913159990672906",
   },
 });
 
@@ -31,3 +31,5 @@ class ToolService extends Service {
     }
   }
 }
+
+module.exports = ToolService

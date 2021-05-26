@@ -8,6 +8,14 @@ const service = axios.create({
 
 // 请求拦截
 // 主要做token的管理
+service.interceptors.request.use(async config=> {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.common['Authorization'] = 'Bearer'  + token
+  }
+  return config
+});
+
 
 // 响应拦截
 service.interceptors.response.use(async response => {

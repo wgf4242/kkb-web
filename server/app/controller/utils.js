@@ -28,7 +28,7 @@ class UtilController extends BaseController {
     const subject = "我的验证码";
     const text = "";
     const html = `<h2>小开社区</h2><a href="https://test.com"><span>${code}</span></a>`;
-    const hasSend = await this.service.tools.sendEmail(email, subject, text, html);
+    const hasSend = await this.service.tools.sendMail(email, subject, text, html);
     if (hasSend) {
       this.message("发送成功");
     } else {
