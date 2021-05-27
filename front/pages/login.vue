@@ -104,7 +104,7 @@ export default {
         timer:0
       },
       form: {
-        email: "chenda131@126.com",
+        email: "eworj@qq.com",
         passwd: "a12312314",
         captcha: ""
       },

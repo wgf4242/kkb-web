@@ -80,7 +80,15 @@ class UserController extends BaseController {
     // 校验用户名是否存在
   }
 
-  async info() {}
+  async info() {
+    const { ctx } = this;
+    //获取header，解析
+    //你不知道是哪个邮件，需要从token里去读取
+    // 有的接口需要从token里读取数据，有的不需要从token里
+    const { email } = ctx.state
+    const user = await this.checkEmail(email)
+    this.success(user)
+  }
 }
 
 module.exports = UserController;
