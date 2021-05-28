@@ -212,3 +212,14 @@ module.exports = app => {
 ## 第4节  21-图片上传0.1版本实现
 
 `npm i fs-extra`
+
+# 第五章
+## 第1节  22-文件上传0.2版本，拖拽+进度条
+
+div里完成 dragover dragleave drop 事件， e.preventDefault
+
+
+第2节  23-文件上传-二进制信息确认文件格式0.3
+第3节  24-文件上传-png和jpg文件类型限制
+第4节  25-web-worker计算md5值
+第5节  26-requestIdleCallback计算文件md5
