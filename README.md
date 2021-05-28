@@ -1,5 +1,8 @@
 web项目训练营
 
+eworj@qq.com a12312314
+eworj@qq.com
+
 # 第二章 项目02
 ## 第1节  06-项目搭建
 [nuxt](https://zh.nuxtjs.org/)
@@ -202,24 +205,10 @@ module.exports = app => {
     1.信息的增删改查
     2.头像的上传
  
-npm i nodemailer
-
-点播： 18-发送邮件验证码
-看点播
+`npm i nodemailer`
 
 第2节  19-登录验证码认证
-课程问答
-
-点播： 19-登录验证码认证
-看点播
-
 第3节  20-axios管理token认证
-课程问答
+## 第4节  21-图片上传0.1版本实现
 
-点播： 20-axios管理token认证
-看点播
-
-第4节  21-图片上传0.1版本实现
-课程问答
-
-点播： 21-图片上传0.1版本实现
+`npm i fs-extra`
