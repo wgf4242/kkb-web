@@ -3,6 +3,8 @@ web项目训练营
 eworj@qq.com a12312314
 eworj@qq.com
 
+MacOS  mongod --config /usr/local/etc/mongod.conf
+
 # 第二章 项目02
 ## 第1节  06-项目搭建
 [nuxt](https://zh.nuxtjs.org/)

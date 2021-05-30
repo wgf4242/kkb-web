@@ -55,8 +55,44 @@ export default {
       }
       this.file = file;
     },
-
+    blobToString(blob) {
+      return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = function() {
+          console.log(reader.result);
+          const ret = reader.result
+            .split("")
+            .map(v => v.charCodeAt())
+            .map(v => v.toString(16).toUpperCase())
+            // .map(v => v.padStart(2, '0')
+            .join(" ");
+          resolve(ret);
+        };
+        reader.readAsBinaryString(blob);
+      });
+    },
+    async isGif(file) {
+      // GIF89a, GIF87a
+      // 前面6个16进制 '47 49 46 38 39 61' '47 49 46 38 37 61'
+      // 16进制的转换
+      const ret = await this.blobToString(file.slice(0, 6));
+      console.log('rrt is ', ret);
+      const isGif = ret == "47 49 46 38 39 61" || ret == "47 49 46 38 37 61";
+      return isGif;
+    },
+    async isImage(file) {
+      // 通过文件流来判定
+      // 先判定是不是 gif
+      return await this.isGif(file);
+    },
     async uploadFile() {
+      console.log(this.file);
+      if (!(await this.isImage(this.file))) {
+        console.log("文件格式不对");
+      } else {
+        console.log(" 格式正确");
+      }
+
       const form = new FormData();
       form.append("name", "file");
       form.append("file", this.file);
