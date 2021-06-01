@@ -17,9 +17,10 @@ module.exports = appInfo => {
   config.keys = appInfo.name + "_1620952248880_3861";
 
   config.multipart = {
-    mode: 'file',
-    whitelist:() => true
-  }
+    mode: "file",
+    fileSize: "100mb",
+    whitelist: () => true,
+  };
 
   config.UPLOAD_DIR = path.resolve(__dirname,'..', 'app/public')
 

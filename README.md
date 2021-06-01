@@ -5,6 +5,10 @@ eworj@qq.com
 
 MacOS  mongod --config /usr/local/etc/mongod.conf
 
+git commit without husky
+
+set HUSKY=0&&git commit -am ""
+
 # 第二章 项目02
 ## 第1节  06-项目搭建
 [nuxt](https://zh.nuxtjs.org/)
