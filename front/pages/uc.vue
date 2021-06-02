@@ -27,13 +27,29 @@
     </div>
 
     <div>
-      <div class="cube-container"></div>
+      <div class="cube-container" :style="{ width: cubeWidth + 'px' }">
+        <div class="cube" v-for="chunk in chunks" :key="chunk.name">
+          <div
+            :class="{
+              uploading: chunk.progress > 0 && chunk.progress < 100,
+              success: chunk.progress == 100,
+              error: (chunk.progress = 0)
+            }"
+          ></div>
+          <li
+            class="el-icon-loading"
+            style="color: #f56c6c;"
+            v-if="chunk.progress < 100 && chunk.progress > 0"
+          ></li>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import sparkMD5 from "spark-md5";
+
 const CHUNK_SIZE = 0.5 * 1024 * 1024;
 export default {
   async mounted() {
@@ -41,8 +57,22 @@ export default {
     console.log(ret);
     this.bindEvents();
   },
+  computed: {
+    cubeWidth() {
+      return Math.ceil(Math.sqrt(this.chunks.length)) * 16;
+    },
+    uploadProgress() {
+      if (!this.file || this.chunks.length) {
+        return 0;
+      }
+      const loaded = this.chunks
+        .map(item => item.chunk.size * item.progress)
+        .reduce((acc, cur) => acc + cur, 0);
+      return parseInt(((loaded * 100) / this.file.size).toFixed(2));
+    }
+  },
   data() {
-    return { file: null, uploadProgress: 0, hashProgress: 0 };
+    return { file: null, hashProgress: 0, chunks: [] };
   },
   methods: {
     bindEvents() {
@@ -227,17 +257,17 @@ export default {
       // const hash1 = await this.calculateHashIdle();
       // console.log("文件hash", hash);
       // console.log("文件hash1", hash1);
-      const hash2 = await this.calculateHashSample();
+      const hash = await this.calculateHashSample();
       // console.log("文件hash2", hash2);
       // 两个hash配合
       // 抽样hash 不算全面
       // 布隆过滤器 损失一小部分的精度 换取效率
-      this.chunks = chunks.map((chunk, index) => {
+      this.chunks = this.chunks.map((chunk, index) => {
         // 切片的名字 hash+index
         const name = hash + "-" + index;
         return { hash, name, index, chunk: chunk.file };
       });
-      await this.uploadChunks();
+      // await this.uploadChunks();
     },
     async uploadChunks() {
       const requests = this.chunks
@@ -280,4 +310,18 @@ export default {
   text-align center
   // &:hover
   //   border-color red
+.cube-container
+  .cube
+    width 14px
+    height 14px
+    line-height 12px
+    border 1px black solid
+    background #eee
+    float left
+    >.success
+      background green
+    >.uploading
+      background blue
+    >.error
+      background red
 </style>
