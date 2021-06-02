@@ -27,6 +27,14 @@
     </div>
 
     <div>
+      <!-- chunk.progress < 0 报错显示红色
+      == 100 成功
+      别的数据 方块高度显示
+
+      尽可能让方块看起来是正方形
+      比如10个方块 4*4
+      9 3*3
+      100 10*10 -->
       <div class="cube-container" :style="{ width: cubeWidth + 'px' }">
         <div class="cube" v-for="chunk in chunks" :key="chunk.name">
           <div
