@@ -25,6 +25,10 @@
     <div>
       <el-button @click="uploadFile">上传</el-button>
     </div>
+
+    <div>
+      <div class="cube-container"></div>
+    </div>
   </div>
 </template>
 
@@ -219,24 +223,50 @@ export default {
       //   console.log(" 格式正确");
       // }
       this.chunks = this.createFileChunk(this.file);
-      const hash = await this.calculateHashWorker();
-      const hash1 = await this.calculateHashIdle();
-      console.log("文件hash", hash);
-      console.log("文件hash1", hash1);
+      // const hash = await this.calculateHashWorker();
+      // const hash1 = await this.calculateHashIdle();
+      // console.log("文件hash", hash);
+      // console.log("文件hash1", hash1);
       const hash2 = await this.calculateHashSample();
-      console.log("文件hash2", hash2);
-
-      const form = new FormData();
-      form.append("name", "file");
-      form.append("file", this.file);
-      const ret = await this.$http.post("/uploadfile", form, {
-        onUploadProgress: progress => {
-          this.uploadProgress = Number(
-            ((progress.loaded / progress.total) * 100).toFixed(2)
-          );
-        }
+      // console.log("文件hash2", hash2);
+      // 两个hash配合
+      // 抽样hash 不算全面
+      // 布隆过滤器 损失一小部分的精度 换取效率
+      this.chunks = chunks.map((chunk, index) => {
+        // 切片的名字 hash+index
+        const name = hash + "-" + index;
+        return { hash, name, index, chunk: chunk.file };
       });
-      console.log(ret);
+      await this.uploadChunks();
+    },
+    async uploadChunks() {
+      const requests = this.chunks
+        .map((chunk, index) => {
+          const form = new FormData();
+          form.append("chunk", chunk.chunk);
+          form.append("hash", chunk.hash);
+          form.append("name", chunk.name);
+          // form.append('index', chunk.index)
+          return form;
+          // onUploadProgress: progress => {
+          //   this.uploadProgress = Number(
+          //     ((progress.loaded / progress.total) * 100).toFixed(2)
+          //   );
+        })
+        .map((form, index) => {
+          this.$http.post("/uploadfile", {
+            onUploadProgress: progress => {
+              // 不是整体的进度条了，而是每个区块有自己的进度条，整体的进度条需要计算
+              this.chunks[index].progreses = Number(
+                ((progress.loaded / progress.total) * 100).toFixed(2)
+              );
+            }
+          });
+        });
+
+      // @todo 并发量控制
+      console.log(123);
+      await Promise.all(requests);
     }
   }
 };
