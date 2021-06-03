@@ -35,14 +35,16 @@
       比如10个方块 4*4
       9 3*3
       100 10*10 -->
+
       <div class="cube-container" :style="{ width: cubeWidth + 'px' }">
         <div class="cube" v-for="chunk in chunks" :key="chunk.name">
           <div
             :class="{
               uploading: chunk.progress > 0 && chunk.progress < 100,
               success: chunk.progress == 100,
-              error: (chunk.progress = 0)
+              error: chunk.progress == 0
             }"
+            :style="{ height: chunk.progress + '%' }"
           ></div>
           <li
             class="el-icon-loading"
@@ -266,6 +268,7 @@ export default {
       // console.log("文件hash", hash);
       // console.log("文件hash1", hash1);
       const hash = await this.calculateHashSample();
+      this.hash = hash;
       // console.log("文件hash2", hash2);
       // 两个hash配合
       // 抽样hash 不算全面
@@ -273,38 +276,41 @@ export default {
       this.chunks = this.chunks.map((chunk, index) => {
         // 切片的名字 hash+index
         const name = hash + "-" + index;
-        return { hash, name, index, chunk: chunk.file };
+        return { hash, name, index, chunk: chunk.file, progress: 2 };
       });
-      // await this.uploadChunks();
+      console.log("----------------", this.chunks);
+      await this.uploadChunks();
     },
     async uploadChunks() {
       const requests = this.chunks
-        .map((chunk, index) => {
+        .map(chunk => {
           const form = new FormData();
           form.append("chunk", chunk.chunk);
           form.append("hash", chunk.hash);
           form.append("name", chunk.name);
           // form.append('index', chunk.index)
           return form;
-          // onUploadProgress: progress => {
-          //   this.uploadProgress = Number(
-          //     ((progress.loaded / progress.total) * 100).toFixed(2)
-          //   );
         })
         .map((form, index) => {
-          this.$http.post("/uploadfile", {
+          this.$http.post("/uploadfile", form, {
             onUploadProgress: progress => {
               // 不是整体的进度条了，而是每个区块有自己的进度条，整体的进度条需要计算
-              this.chunks[index].progreses = Number(
-                ((progress.loaded / progress.total) * 100).toFixed(2)
+              this.chunks[index].progress = Number( ((progress.loaded / progress.total) * 100).toFixed(2)
               );
             }
           });
         });
 
       // @todo 并发量控制
-      console.log(123);
       await Promise.all(requests);
+      await this.mergeRequest();
+    },
+    async mergeRequest() {
+      this.$http.post("/mergefile", {
+        ext: this.file.name.split(".").pop(),
+        size: CHUNK_SIZE,
+        hash: this.hash
+      });
     }
   }
 };
