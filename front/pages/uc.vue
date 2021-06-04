@@ -291,7 +291,7 @@ export default {
         const name = hash + "-" + index;
         return { hash, name, index, chunk: chunk.file,
         // 设置进度条，已经上传的，设为100%
-         progress: uploadedList.indexOf(name) >=-1 ? 100 : 0 };
+         progress: uploadedList.indexOf(name) > -1 ? 100 : 0 };
       });
       await this.uploadChunks(uploadedList);
     },
@@ -304,9 +304,9 @@ export default {
           form.append("hash", chunk.hash);
           form.append("name", chunk.name);
           // form.append('index', chunk.index)
-          return form;
+          return {form, index:chunk.index};
         })
-        .map((form, index) => {
+        .map(({form, index}) => {
           this.$http.post("/uploadfile", form, {
             onUploadProgress: progress => {
               // 不是整体的进度条了，而是每个区块有自己的进度条，整体的进度条需要计算
