@@ -7,7 +7,7 @@ MacOS  mongod --config /usr/local/etc/mongod.conf
 
 git commit without husky
 
-set HUSKY=0&&git commit -am ""
+set HUSKY=0&&git commit -am ""&&git push
 
 # 第二章 项目02
 ## 第1节  06-项目搭建
@@ -256,3 +256,13 @@ SparkMD5 操作毫秒级时，大颗粒不太合适。尝试使用时间切片�
 第3节  29-网格进度条
 第4节  30-切片上传后端实现
 第5节  31-后端文件合并
+
+## 第七章 项目07
+
+第1节  32-秒传功能实现
+checkfile请求 计算hash, 检查hash文件存在，uploaded = true, else uploadedList = [xx1,xx2,xx3]
+
+第2节  33-断点续传
+第3节  34-异步任务控制
+第4节  35-并发数控制实现（头条藐视提）
+第5节  36-报错重试+报错次数限制实现

@@ -269,6 +269,19 @@ export default {
       // console.log("文件hash1", hash1);
       const hash = await this.calculateHashSample();
       this.hash = hash;
+
+      // 问一下后端，文件是否上传过，如果没有，是否有存在的切片
+      const {data: {uploaded, uploadedList}} =  await this.$http.post('/checkfile', {
+        hash:this.hash,
+        ext: this.file.name.split('.').pop()
+      })
+
+      console.log(uploaded, uploadedList);
+      if (uploaded) {
+        // 秒传
+        return this.$message.success('秒传成功!')
+        
+      }
       // console.log("文件hash2", hash2);
       // 两个hash配合
       // 抽样hash 不算全面
@@ -276,13 +289,15 @@ export default {
       this.chunks = this.chunks.map((chunk, index) => {
         // 切片的名字 hash+index
         const name = hash + "-" + index;
-        return { hash, name, index, chunk: chunk.file, progress: 2 };
+        return { hash, name, index, chunk: chunk.file,
+        // 设置进度条，已经上传的，设为100%
+         progress: uploadedList.indexOf(name) >=-1 ? 100 : 0 };
       });
-      console.log("----------------", this.chunks);
-      await this.uploadChunks();
+      await this.uploadChunks(uploadedList);
     },
-    async uploadChunks() {
+    async uploadChunks(uploadedList) {
       const requests = this.chunks
+        .filter(chunk => uploadedList.indexOf(chunk.name) == -1)
         .map(chunk => {
           const form = new FormData();
           form.append("chunk", chunk.chunk);
@@ -303,7 +318,7 @@ export default {
 
       // @todo 并发量控制
       await Promise.all(requests);
-      await this.mergeRequest();
+      // await this.mergeRequest();
     },
     async mergeRequest() {
       this.$http.post("/mergefile", {
