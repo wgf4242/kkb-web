@@ -271,16 +271,17 @@ export default {
       this.hash = hash;
 
       // 问一下后端，文件是否上传过，如果没有，是否有存在的切片
-      const {data: {uploaded, uploadedList}} =  await this.$http.post('/checkfile', {
-        hash:this.hash,
-        ext: this.file.name.split('.').pop()
-      })
+      const {
+        data: { uploaded, uploadedList }
+      } = await this.$http.post("/checkfile", {
+        hash: this.hash,
+        ext: this.file.name.split(".").pop()
+      });
 
       console.log(uploaded, uploadedList);
       if (uploaded) {
         // 秒传
-        return this.$message.success('秒传成功!')
-        
+        return this.$message.success("秒传成功!");
       }
       // console.log("文件hash2", hash2);
       // 两个hash配合
@@ -289,9 +290,14 @@ export default {
       this.chunks = this.chunks.map((chunk, index) => {
         // 切片的名字 hash+index
         const name = hash + "-" + index;
-        return { hash, name, index, chunk: chunk.file,
-        // 设置进度条，已经上传的，设为100%
-         progress: uploadedList.indexOf(name) > -1 ? 100 : 0 };
+        return {
+          hash,
+          name,
+          index,
+          chunk: chunk.file,
+          // 设置进度条，已经上传的，设为100%
+          progress: uploadedList.indexOf(name) > -1 ? 100 : 0
+        };
       });
       await this.uploadChunks(uploadedList);
     },
@@ -304,21 +310,66 @@ export default {
           form.append("hash", chunk.hash);
           form.append("name", chunk.name);
           // form.append('index', chunk.index)
-          return {form, index:chunk.index};
-        })
-        .map(({form, index}) => {
-          this.$http.post("/uploadfile", form, {
-            onUploadProgress: progress => {
-              // 不是整体的进度条了，而是每个区块有自己的进度条，整体的进度条需要计算
-              this.chunks[index].progress = Number( ((progress.loaded / progress.total) * 100).toFixed(2)
-              );
-            }
-          });
+          return { form, index: chunk.index };
         });
+      // .map(({form, index}) => {
+      //   this.$http.post("/uploadfile", form, {
+      //     onUploadProgress: progress => {
+      //       // 不是整体的进度条了，而是每个区块有自己的进度条，整体的进度条需要计算
+      //       this.chunks[index].progress = Number( ((progress.loaded / progress.total) * 100).toFixed(2)
+      //       );
+      //     }
+      //   });
+      // });
 
       // @todo 并发量控制
-      await Promise.all(requests);
+      // 尝试申请 tcp 连接过多，会造成卡顿
+      // 异步的并发控制
+      // await Promise.all(requests);
+      await this.sendRequest(requests);
       // await this.mergeRequest();
+    },
+    async sendRequest(chunks, limit = 3) {
+      // limit 并发数
+      // 一个数组 长度是 limit
+      // [task1, task2, task3] => [task2, task3, task4]
+
+      return new Promise((resolve, reject) => {
+        const len = chunks.length;
+        let counter = 0;
+        const start = async () => {
+          const task = chunks.shift();
+          if (task) {
+            const { form, index } = task;
+            this.$http.post("/uploadfile", form, {
+              onUploadProgress: progress => {
+                // 不是整体的进度条了，而是每个区块有自己的进度条，整体的进度条需要计算
+                this.chunks[index].progress = Number(
+                  ((progress.loaded / progress.total) * 100).toFixed(2)
+                );
+              }
+            });
+
+            if ((counter = len - 1)) {
+              // 最后一个任务
+              resolve();
+            } else {
+              counter++;
+              //  启动下一个任务
+              start();
+            }
+          }
+        };
+
+        while (limit > 0) {
+          // 启动 limit 个任务
+          // 模拟一下延迟
+          setTimeout(() => {
+            start();
+          }, Math.random() * 2000);
+          limit -= 1;
+        }
+      });
     },
     async mergeRequest() {
       this.$http.post("/mergefile", {
