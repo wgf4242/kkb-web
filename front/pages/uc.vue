@@ -341,7 +341,7 @@ export default {
           const task = chunks.shift();
           if (task) {
             const { form, index } = task;
-            this.$http.post("/uploadfile", form, {
+            await this.$http.post("/uploadfile", form, {
               onUploadProgress: progress => {
                 // 不是整体的进度条了，而是每个区块有自己的进度条，整体的进度条需要计算
                 this.chunks[index].progress = Number(
@@ -350,7 +350,7 @@ export default {
               }
             });
 
-            if ((counter = len - 1)) {
+            if (counter == len - 1) {
               // 最后一个任务
               resolve();
             } else {
