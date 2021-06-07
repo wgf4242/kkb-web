@@ -42,7 +42,7 @@
             :class="{
               uploading: chunk.progress > 0 && chunk.progress < 100,
               success: chunk.progress == 100,
-              error: chunk.progress == 0
+              error: chunk.progress <= 0
             }"
             :style="{ height: chunk.progress + '%' }"
           ></div>
@@ -310,7 +310,7 @@ export default {
           form.append("hash", chunk.hash);
           form.append("name", chunk.name);
           // form.append('index', chunk.index)
-          return { form, index: chunk.index };
+          return { form, index: chunk.index, error: 0};
         });
       // .map(({form, index}) => {
       //   this.$http.post("/uploadfile", form, {
@@ -327,8 +327,13 @@ export default {
       // 异步的并发控制
       // await Promise.all(requests);
       await this.sendRequest(requests);
-      // await this.mergeRequest();
+      await this.mergeRequest();
     },
+    // TCP慢启动，先上传一个初始区块，比如10KB，根据上传的成功时间，决定下一个区域是20K，还是50K，还是5K
+    // 在下一个一样的逻辑,可能变成100K,200K,或者2K
+    // 上传可能报错
+    // 报错之后进度条变红，开始重试
+    // 一个切片重试失败三次，整体全部终止
     async sendRequest(chunks, limit = 3) {
       // limit 并发数
       // 一个数组 长度是 limit
@@ -337,26 +342,43 @@ export default {
       return new Promise((resolve, reject) => {
         const len = chunks.length;
         let counter = 0;
+        let isStop = false;
         const start = async () => {
+          if (isStop) {
+            return;
+          }
           const task = chunks.shift();
           if (task) {
             const { form, index } = task;
-            await this.$http.post("/uploadfile", form, {
-              onUploadProgress: progress => {
-                // 不是整体的进度条了，而是每个区块有自己的进度条，整体的进度条需要计算
-                this.chunks[index].progress = Number(
-                  ((progress.loaded / progress.total) * 100).toFixed(2)
-                );
-              }
-            });
+            try {
+              await this.$http.post("/uploadfile", form, {
+                onUploadProgress: progress => {
+                  // 不是整体的进度条了，而是每个区块有自己的进度条，整体的进度条需要计算
+                  this.chunks[index].progress = Number(
+                    ((progress.loaded / progress.total) * 100).toFixed(2)
+                  );
+                }
+              });
 
-            if (counter == len - 1) {
-              // 最后一个任务
-              resolve();
-            } else {
-              counter++;
-              //  启动下一个任务
-              start();
+              if (counter == len - 1) {
+                // 最后一个任务
+                resolve();
+              } else {
+                counter++;
+                //  启动下一个任务
+                start();
+              }
+            } catch (e) {
+              this.chunks[index].progress = -1;
+              if (task.error < 3) {
+                task.error++;
+                chunks.unshift(task);
+                start();
+              } else {
+                // 错误3次
+                isStop = true;
+                reject();
+              }
             }
           }
         };
