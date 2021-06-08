@@ -5,7 +5,12 @@
     </div>
     <el-row>
       <el-col :span="12">
-        <textarea ref="editor" class="md-editor" :value="content" @input="update" ></textarea>
+        <textarea
+          ref="editor"
+          class="md-editor"
+          :value="content"
+          @input="update"
+        ></textarea>
       </el-col>
       <el-col :span="12">
         <div class="markdown-body" v-html="compiledContent"></div>
@@ -15,33 +20,46 @@
 </template>
 
 <script>
-import marked from 'marked';
-import hljs from 'highlight.js';
-import javascript from 'highlight.js/lib/languages/javascript';
+import marked from "marked";
+import hljs from "highlight.js";
+import javascript from "highlight.js/lib/languages/javascript";
+import 'highlight.js/styles/monokai-sublime.css';
+
 export default {
   data() {
     return {
       content: `# 开课吧
-      * 上课
-      * 吃饭
-      * 写代码
-      \`\`\`javascript
-        let a=1;
-        console.log(a);
-      \`\`\`
+* 上课
+* 吃饭
+* 写代码
+
+\`\`\`javascript
+
+let a=1;
+console.log('123');
+
+\`\`\`
       `
     };
   },
   mounted() {
-    this.timer = null
+    this.timer = null;
     this.bindEvents();
 
-    marked.setOption({
-      rendered: new marked.Rendered(),
-      highlight(code){
-        return hljs.highlightAuto(code).value
+
+      // marked.setOptions({
+      //     renderer: new marked.Renderer(),
+      //     highlight: function(code) {
+      //       return hljs.highlightAuto(code).value;
+      //     }
+      //   }
+      // );
+    marked.setOptions({
+      rendered: new marked.Renderer(),
+      highlight(code) {
+        return hljs.highlightAuto(code).value;
       }
-    })
+    });
   },
   computed: {
     compiledContent() {
@@ -50,26 +68,31 @@ export default {
   },
   methods: {
     bindEvents() {
-      this.$refs.editor.addEventListener('paste', async e=>{
-        const files = e.clipboardData.files
+      this.$refs.editor.addEventListener("paste", async e => {
+        const files = e.clipboardData.files;
         console.log(files);
         // 文件上传
-      })
-      this.$refs.editor.addEventListener('drop', async e=>{
-        const files = e.dataTransfer.files
+      });
+      this.$refs.editor.addEventListener("drop", async e => {
+        const files = e.dataTransfer.files;
         console.log(files);
         // @todo 文件上传
         e.preventDefault();
-      })
+      });
     },
     update(e) {
-      clearTimeout(this.timer)
+      clearTimeout(this.timer);
       setTimeout(() => {
-          this.content = e.target.value;
-      }, 350)
+        this.content = e.target.value;
+      }, 350);
     },
-    submit() {
-
+    async submit() {
+      // 文章列表，点赞，关注 ，草稿
+      // user => article 一对多
+      let ret = await this.$http.post("/article/create", {
+        content: this.content,
+        compiledContent: this.compiledContent
+      });
     }
   }
 };
