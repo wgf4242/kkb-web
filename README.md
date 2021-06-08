@@ -285,3 +285,14 @@ npm install highlight.js --save
 第4节  40-文章存储接口
 第5节  41-富文本编辑器选型
 
+
+## 第十章 
+### 第1节  45-首页布局
+
+第2节  46-文章列表
+第3节  47-虚拟列表实现文章列表
+第4节  48-点赞和关注
+
+# 其他
+
+https://github.com/shengxinjing/vue3-vs-vue2
