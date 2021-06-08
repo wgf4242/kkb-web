@@ -1,5 +1,11 @@
 <template>
   <div>
+    <!-- <div contenteditable="true">哈哈</div>
+    document.execCommand('')
+    1. 刚开始第三方的 tinyMce, wangEditor
+    2. 开源的定制 slate.js
+    3. 有专门的编辑器开发团队，自己定制，非常复杂，word在线版，计算位置，定位，样式，
+    实现一个简单的浏览器工作量差不多的。 -->
     <div class="write-btn">
       <el-button type="primary" @click="submit">提交</el-button>
     </div>
@@ -46,14 +52,6 @@ console.log('123');
     this.timer = null;
     this.bindEvents();
 
-
-      // marked.setOptions({
-      //     renderer: new marked.Renderer(),
-      //     highlight: function(code) {
-      //       return hljs.highlightAuto(code).value;
-      //     }
-      //   }
-      // );
     marked.setOptions({
       rendered: new marked.Renderer(),
       highlight(code) {
