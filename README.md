@@ -279,7 +279,9 @@ npm i marked --save
 
 
 第2节  38-粘贴和拖拽图片
-第3节  39-mared编辑器扩展1-高亮
+### 第3节  39-mared编辑器扩展1-高亮
+npm install highlight.js --save
+
 第4节  40-文章存储接口
 第5节  41-富文本编辑器选型
 
