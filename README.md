@@ -290,7 +290,11 @@ npm install highlight.js --save
 ### 第1节  45-首页布局
 
 第2节  46-文章列表
-第3节  47-虚拟列表实现文章列表
+## 第3节  47-虚拟列表实现文章列表
+sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
+yarn add node-sass@4.14.1 sass-loader@9.0.2
+
+
 第4节  48-点赞和关注
 
 # 其他

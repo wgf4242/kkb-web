@@ -1,20 +1,22 @@
 <template>
-  <div class="container">
-    <div v-for="article in articles" :key="article.title">
-      {{ article.title }}
-    </div>
+  <div class="kkb-container">
+    <VirtualList :listData="articles"> </VirtualList>
   </div>
 </template>
 
 <script>
+import VirtualList from "~/components/VirtualList.vue";
 export default {
+  components: {
+    VirtualList
+  },
   data() {
- return {articles:[]}
+    return { articles: [] };
   },
   async mounted() {
-    let ret = await this.$http.get("/article")
-    if (ret.code==0) {
-      this.articles = ret.data
+    let ret = await this.$http.get("/article");
+    if (ret.code == 0) {
+      this.articles = ret.data;
     }
   }
 };
