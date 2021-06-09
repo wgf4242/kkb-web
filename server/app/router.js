@@ -5,7 +5,7 @@
  */
 module.exports = app => {
   const { router, controller } = app;
-  const jwt= app.middleware.jwt({app})
+  const jwt = app.middleware.jwt({ app })
 
   router.get("/", controller.home.index);
 
@@ -22,9 +22,12 @@ module.exports = app => {
 
     router.post('/register', register)
     router.post('/login', login)
-    router.get('/info',jwt, info)
-    router.get('/detail',jwt, info)
+    router.get('/info', jwt, info)
+    router.get('/detail', jwt, info)
     router.get('/verify', verify)
     
   });
+  router.group({ name: "article", prefix: "/article" }, router => {
+    router.get('/', controller.article.index)
+  })
 };
