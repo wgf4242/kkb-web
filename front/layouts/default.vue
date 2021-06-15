@@ -4,7 +4,7 @@
     <el-container>
       <el-header>
         <el-menu mode="horizontal">
-          <el-menu-item index="0"> <img src="/logo.png"/></el-menu-item>
+          <el-menu-item index="0"> <img src="/logo.png" style="height:60px"/></el-menu-item>
           <el-menu-item>
             <nuxt-link to="/"></nuxt-link>
           </el-menu-item>
@@ -108,5 +108,12 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+.kkb-container{
+  width:980px;
+  height:80vh;
+  margin:0 auto;
+  background: #fff;
+  padding:20px;
 }
 </style>

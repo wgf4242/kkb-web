@@ -53,4 +53,7 @@ export default {
 .links {
   padding-top: 15px;
 }
+body {
+  background-color: #eee;
+}
 </style>
