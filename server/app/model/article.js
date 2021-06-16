@@ -13,8 +13,9 @@ module.exports = app => {
         ref: "User",
         require: true,
       },
-      views: { type: Number, require: true, default: 0 },
-      like: { type: Number, require: true, default: 0 },
+      views: { type: Number, require: false, default: 1 },
+      like: { type: Number, require: false, default: 0 },
+      dislike: { type: Number, require: false, default:0}
     },
     { timestamp: true }
   );
